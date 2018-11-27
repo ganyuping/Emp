@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd  
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+            http://www.springframework.org/schema/context
+             http://www.springframework.org/schema/context/sprint-context-4.1.xsd">
+	<bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/userdb"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+	</bean>   
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<property name="dataSource" ref="datasource"></property>
+	<!-- Hibernate的资源文件的路径 -->
+	<property name="configLocation" value="classpath:hibernate.cfg.xml" ></property>
+	</bean>     
+	<!-- 整合Hibernate和Spring的时候不在使用sessionfactory来查询数据库   -->   
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>  
+	<bean id="Userdaoimp" class="com.direct.daoimp.Userdaoimp">
+		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+	</bean>
+	<bean id="Userserviceimp" class="com.direct.serviceimp.Userserviceimp">
+		<property name="Userdaoimp" ref="Userdaoimp"></property>
+	</bean>
+</beans>            
